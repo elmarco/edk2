@@ -170,6 +170,7 @@ INF  MdeModulePkg/Universal/Variable/Pei/VariablePei.inf
 !endif
 !if $(TPM2_ENABLE) == TRUE
 INF  SecurityPkg/Tcg/Tcg2Config/Tcg2ConfigPei.inf
+INF  SecurityPkg/Tcg/Tcg2Pei/Tcg2Pei.inf
 !endif
 
 ################################################################################
