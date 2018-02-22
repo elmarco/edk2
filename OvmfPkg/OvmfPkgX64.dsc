@@ -213,6 +213,8 @@
 !if $(TPM2_ENABLE) == TRUE
   Tpm12CommandLib|SecurityPkg/Library/Tpm12CommandLib/Tpm12CommandLib.inf
   Tpm2CommandLib|SecurityPkg/Library/Tpm2CommandLib/Tpm2CommandLib.inf
+  Tcg2PhysicalPresenceLib|SecurityPkg/Library/DxeTcg2PhysicalPresenceLib/DxeTcg2PhysicalPresenceLib.inf
+  Tcg2PpVendorLib|SecurityPkg/Library/Tcg2PpVendorLibNull/Tcg2PpVendorLibNull.inf
 !endif
 
 [LibraryClasses.common]
@@ -364,6 +366,11 @@
   PciLib|OvmfPkg/Library/DxePciLibI440FxQ35/DxePciLibI440FxQ35.inf
   MpInitLib|UefiCpuPkg/Library/MpInitLib/DxeMpInitLib.inf
   QemuFwCfgS3Lib|OvmfPkg/Library/QemuFwCfgS3Lib/DxeQemuFwCfgS3LibFwCfg.inf
+!if $(TPM2_ENABLE)
+  HashLib|SecurityPkg/Library/HashLibBaseCryptoRouter/HashLibBaseCryptoRouterDxe.inf
+  Tpm12DeviceLib|SecurityPkg/Library/Tpm12DeviceLibTcg/Tpm12DeviceLibTcg.inf
+  Tpm2DeviceLib|SecurityPkg/Library/Tpm2DeviceLibTcg2/Tpm2DeviceLibTcg2.inf
+!endif
 
 [LibraryClasses.common.UEFI_APPLICATION]
   PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
@@ -651,6 +658,14 @@
   SecurityPkg/Tcg/Tcg2Config/Tcg2ConfigPei.inf
   SecurityPkg/Tcg/Tcg2Pei/Tcg2Pei.inf {
     <LibraryClasses>
+      NULL|SecurityPkg/Library/HashInstanceLibSha1/HashInstanceLibSha1.inf
+      NULL|SecurityPkg/Library/HashInstanceLibSha256/HashInstanceLibSha256.inf
+  }
+
+  SecurityPkg/Tcg/Tcg2Dxe/Tcg2Dxe.inf {
+    <LibraryClasses>
+      Tpm2DeviceLib|SecurityPkg/Library/Tpm2DeviceLibRouter/Tpm2DeviceLibRouterDxe.inf
+      NULL|SecurityPkg/Library/Tpm2DeviceLibDTpm/Tpm2InstanceLibDTpm.inf
       NULL|SecurityPkg/Library/HashInstanceLibSha1/HashInstanceLibSha1.inf
       NULL|SecurityPkg/Library/HashInstanceLibSha256/HashInstanceLibSha256.inf
   }
