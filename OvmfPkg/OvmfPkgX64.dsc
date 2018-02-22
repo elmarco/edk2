@@ -669,6 +669,8 @@
       NULL|SecurityPkg/Library/HashInstanceLibSha1/HashInstanceLibSha1.inf
       NULL|SecurityPkg/Library/HashInstanceLibSha256/HashInstanceLibSha256.inf
   }
+
+  SecurityPkg/Tcg/Tcg2Config/Tcg2ConfigDxe.inf
 !endif
 
 !if $(SECURE_BOOT_ENABLE) == TRUE
