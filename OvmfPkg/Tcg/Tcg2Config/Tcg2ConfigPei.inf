@@ -1,0 +1,57 @@
+## @file
+#  Set TPM device type
+#
+#  This module initializes TPM device type based on variable and detection.
+#  This OvmfPkg of SecurityPkg only does TPM2 detection.
+#
+# Copyright (c) 2015 - 2016, Intel Corporation. All rights reserved.<BR>
+# Copyright (C) 2018, Red Hat, Inc.
+#
+# This program and the accompanying materials
+# are licensed and made available under the terms and conditions of the BSD License
+# which accompanies this distribution. The full text of the license may be found at
+# http://opensource.org/licenses/bsd-license.php
+# THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+# WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = Tcg2ConfigPei
+  FILE_GUID                      = BF7F2B0C-9F2F-4889-AB5C-12460022BE87
+  MODULE_TYPE                    = PEIM
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = Tcg2ConfigPeimEntryPoint
+
+[Sources]
+  Tcg2ConfigPeim.c
+  TpmDetection.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  SecurityPkg/SecurityPkg.dec
+
+[LibraryClasses]
+  PeimEntryPoint
+  DebugLib
+  Tpm2DeviceLib
+
+[Guids]
+  ## SOMETIMES_CONSUMES ## Variable:L"TCG2_CONFIGURATION"
+  ## SOMETIMES_CONSUMES ## Variable:L"TCG2_DEVICE_DETECTION"
+  gTcg2ConfigFormSetGuid
+  gEfiTpmDeviceSelectedGuid           ## PRODUCES             ## GUID    # Used as a PPI GUID
+  gEfiTpmDeviceInstanceNoneGuid       ## SOMETIMES_CONSUMES   ## GUID    # TPM device identifier
+
+[Ppis]
+  gPeiTpmInitializationDonePpiGuid    ## SOMETIMES_PRODUCES
+
+[Pcd]
+  gEfiSecurityPkgTokenSpaceGuid.PcdTpmInstanceGuid                 ## PRODUCES
+  gEfiSecurityPkgTokenSpaceGuid.PcdTpmAutoDetection                ## CONSUMES
+  gEfiSecurityPkgTokenSpaceGuid.PcdTpmBaseAddress                  ## SOMETIMES_CONSUMES
+
+[Depex]
+  gEfiPeiMasterBootModePpiGuid
