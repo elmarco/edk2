@@ -40,6 +40,7 @@
   DEFINE SMM_REQUIRE             = FALSE
   DEFINE TLS_ENABLE              = FALSE
   DEFINE MEM_VARSTORE_EMU_ENABLE = TRUE
+  DEFINE TPM2_ENABLE             = FALSE
 
   #
   # Flash size selection. Setting FD_SIZE_IN_KB on the command line directly to
@@ -209,6 +210,11 @@
   OrderedCollectionLib|MdePkg/Library/BaseOrderedCollectionRedBlackTreeLib/BaseOrderedCollectionRedBlackTreeLib.inf
   XenHypercallLib|OvmfPkg/Library/XenHypercallLib/XenHypercallLib.inf
 
+!if $(TPM2_ENABLE) == TRUE
+  Tpm12CommandLib|SecurityPkg/Library/Tpm12CommandLib/Tpm12CommandLib.inf
+  Tpm2CommandLib|SecurityPkg/Library/Tpm2CommandLib/Tpm2CommandLib.inf
+!endif
+
 [LibraryClasses.common]
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
 
@@ -272,6 +278,10 @@
   QemuFwCfgS3Lib|OvmfPkg/Library/QemuFwCfgS3Lib/PeiQemuFwCfgS3LibFwCfg.inf
   PcdLib|MdePkg/Library/PeiPcdLib/PeiPcdLib.inf
   QemuFwCfgLib|OvmfPkg/Library/QemuFwCfgLib/QemuFwCfgPeiLib.inf
+!if $(TPM2_ENABLE)
+  Tpm12DeviceLib|SecurityPkg/Library/Tpm12DeviceLibDTpm/Tpm12DeviceLibDTpm.inf
+  Tpm2DeviceLib|SecurityPkg/Library/Tpm2DeviceLibDTpm/Tpm2DeviceLibDTpm.inf
+!endif
 
 [LibraryClasses.common.DXE_CORE]
   HobLib|MdePkg/Library/DxeCoreHobLib/DxeCoreHobLib.inf
@@ -558,6 +568,12 @@
 
   gEfiSecurityPkgTokenSpaceGuid.PcdOptionRomImageVerificationPolicy|0x00
 
+!if $(TPM2_ENABLE) == TRUE
+  gEfiSecurityPkgTokenSpaceGuid.PcdTpmInstanceGuid|{0xb6, 0xe5, 0x01, 0x8b, 0x19, 0x4f, 0xe8, 0x46, 0xab, 0x93, 0x1c, 0x53, 0x67, 0x1b, 0x90, 0xcc}
+  gEfiSecurityPkgTokenSpaceGuid.PcdTpm2InitializationPolicy|1
+  gEfiSecurityPkgTokenSpaceGuid.PcdTpmInitializationPolicy|1
+!endif
+
 ################################################################################
 #
 # Components Section - list of all EDK II Modules needed by this Platform.
@@ -628,6 +644,10 @@
   }
 
   MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
+
+!if $(TPM2_ENABLE) == TRUE
+  SecurityPkg/Tcg/Tcg2Config/Tcg2ConfigPei.inf
+!endif
 
 !if $(SECURE_BOOT_ENABLE) == TRUE
   MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf {
