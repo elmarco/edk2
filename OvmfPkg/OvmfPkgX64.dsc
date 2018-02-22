@@ -677,7 +677,10 @@
   MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf {
     <LibraryClasses>
       NULL|SecurityPkg/Library/DxeImageVerificationLib/DxeImageVerificationLib.inf
-	}
+!if $(TPM2_ENABLE) == TRUE
+      NULL|SecurityPkg/Library/DxeTpm2MeasureBootLib/DxeTpm2MeasureBootLib.inf
+!endif
+  }
 !else
   MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
 !endif
