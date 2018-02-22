@@ -89,6 +89,10 @@ GetNextHob (
     if (Hob.Header->HobType == Type) {
       return Hob.Raw;
     }
+    if (GET_HOB_LENGTH (HobStart) == 0) {
+        DEBUG ((DEBUG_INFO, "FIXME: GetNextHob length == 0"));
+        return NULL;
+    }
     Hob.Raw = GET_NEXT_HOB (Hob);
   }
   return NULL;
